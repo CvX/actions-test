@@ -1,3 +1,3 @@
 # Test
 
-Hey there!
+Hey there! :)
