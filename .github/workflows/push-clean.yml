@@ -1,10 +1,10 @@
-name: Create-Release
+name: Push Clean
 
 on:
-  create:
-  release:
-    types:
-      - created
+  push:
+    tags:
+      - v*
+
 jobs:
   build:
     runs-on: ubuntu-latest

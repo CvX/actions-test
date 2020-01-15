@@ -1,11 +1,6 @@
-name: Push
+name: Create
 
-on:
-  push:
-    branches:
-      - "*"
-    tags:
-      - '*'
+on: create
 
 jobs:
   build:
