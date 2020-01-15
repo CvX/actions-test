@@ -1,7 +1,10 @@
-name: CI
+name: Create-Release
 
-on: [create, push, release]
-
+on:
+  create:
+  release:
+    types:
+      - created
 jobs:
   build:
     runs-on: ubuntu-latest

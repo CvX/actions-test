@@ -1,0 +1,20 @@
+name: Push
+
+on:
+  push:
+    branches:
+      - "*"
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Other
+      if: contains(github.ref, 'refs/tags/v')
+      run: echo test
