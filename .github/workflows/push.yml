@@ -24,8 +24,5 @@ jobs:
     - name: debug
       run: cat /etc/apt/sources.list
 
-    - name: debug2
-      run: cat /etc/apt/apt.conf
-
     - name: apt
       run: sudo apt-get -yqq install jhead
