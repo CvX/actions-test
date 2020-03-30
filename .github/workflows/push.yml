@@ -13,8 +13,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
     - name: Run a one-line script
       run: echo Hello, world!
+
     - name: Other
       if: contains(github.ref, 'refs/tags/v')
       run: echo test
+
+    - name: debug
+      run: cat /etc/apt/sources.list
+
+    - name: debug2
+      run: cat /etc/apt/apt.conf
+
+    - name: apt
+      run: sudo apt-get -yqq install jhead
