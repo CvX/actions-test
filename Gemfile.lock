@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/discourse/rubocop-discourse
+  revision: 15c4e247c78f541f856d3f4a7602781f6d40f908
+  ref: 15c4e247c78f541f856d3f4a7602781f6d40f908
+  specs:
+    rubocop-discourse (2.1.2)
+      rubocop (>= 0.69.0)
+      rubocop-rspec (>= 1.39.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -14,9 +23,6 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-discourse (2.1.2)
-      rubocop (>= 0.69.0)
-      rubocop-rspec (>= 1.39.0)
     rubocop-rspec (1.39.0)
       rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
@@ -26,7 +32,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rubocop-discourse
+  rubocop-discourse!
 
 BUNDLED WITH
    2.1.4
