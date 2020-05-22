@@ -24,12 +24,12 @@ jobs:
     - name: debug
       run: cat /etc/apt/sources.list
 
-    - name: Failin or not?
-      run: |
-        echo 'test!'
-        false
-        echo 'test2!'
-        true
+    # - name: Failin or not?
+    #   run: |
+    #     echo 'test!'
+    #     false
+    #     echo 'test2!'
+    #     true
 
     - name: apt
       run: sudo apt-get -yqq install jhead
