@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CvX/rubocop
-  revision: db296ba8ff4afb7ee0ed0fd9d7f4e72c91d04aff
+  revision: 61482c1ae5668a7744a1398ae79b5ff21066c968
   branch: bundler-compat
   specs:
-    rubocop (0.83.0)
+    rubocop (0.84.0)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
