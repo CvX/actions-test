@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CvX/rubocop
-  revision: 61482c1ae5668a7744a1398ae79b5ff21066c968
+  revision: d59d18764d88b8f6058bd50d85b6aa2c5f52faf6
   branch: bundler-compat
   specs:
     rubocop (0.84.0)
