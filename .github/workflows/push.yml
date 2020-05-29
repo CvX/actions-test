@@ -32,7 +32,7 @@ jobs:
         os: [ ubuntu-latest ]
         ruby: [ '2.6' ]
         postgres: [ '10' ]
-        redis: [ '4.x' ]
+        redis: [ '5' ]
 
     services:
       postgres:
@@ -49,6 +49,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      redis:
+        image: redis:${{ matrix.redis }}
+        ports:
+          - 6379:6379
 
     steps:
       - uses: actions/checkout@master
@@ -66,12 +70,6 @@ jobs:
         run: |
           sudo apt-get -yqq install postgresql-client libpq-dev gifsicle jpegoptim optipng jhead
           wget -qO- https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-pngquant | sudo sh
-
-      - name: Setup redis
-        uses: shogo82148/actions-setup-redis@v1
-        if: env.BUILD_TYPE != 'LINT'
-        with:
-          redis-version: ${{ matrix.redis }}
 
       - name: Setup ruby
         uses: actions/setup-ruby@v1
