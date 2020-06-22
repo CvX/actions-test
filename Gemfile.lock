@@ -26,8 +26,8 @@ GEM
   specs:
     ast (2.4.1)
     parallel (1.19.2)
-    parser (2.7.1.3)
-      ast (~> 2.4.0)
+    parser (2.7.1.4)
+      ast (~> 2.4.1)
     rainbow (3.0.0)
     rexml (3.2.4)
     rubocop-ast (0.0.3)
