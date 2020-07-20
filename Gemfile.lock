@@ -30,7 +30,7 @@ GEM
       ast (~> 2.4.1)
     rainbow (3.0.0)
     rexml (3.2.4)
-    rubocop-ast (0.1.0)
+    rubocop-ast (0.2.0)
       parser (>= 2.7.0.1)
     rubocop-rspec (1.41.0)
       rubocop (>= 0.68.1)
