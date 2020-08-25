@@ -31,3 +31,6 @@ jobs:
           rubocop_command_prefix: 'bundle exec'
           auto_fix: true
           git_email: 'ci@discourse'
+          
+      - name: Am I always executed?
+        run: echo "probably"
