@@ -2,6 +2,10 @@
 
 source "https://rubygems.org"
 
+if defined?(Rails)
+  Rails.configuration.multisite = true
+end
+
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem "rubocop", github: "CvX/rubocop", branch: "bundler-compat"
