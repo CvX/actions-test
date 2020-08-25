@@ -3,13 +3,13 @@ name: Push
 on:
   push:
     branches:
-      - "*"
+      - '*'
     tags:
       - '*'
 
 jobs:
   build:
-    name: "${{ matrix.target }}-${{ matrix.build_types }}"
+    name: '${{ matrix.target }}-${{ matrix.build_types }}'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
 
@@ -27,12 +27,12 @@ jobs:
       fail-fast: false
 
       matrix:
-        build_types: [ 'BACKEND', 'FRONTEND', 'LINT' ]
-        target: [ 'PLUGINS', 'CORE' ]
-        os: [ ubuntu-latest ]
-        ruby: [ '2.6' ]
-        postgres: [ '10' ]
-        redis: [ '5' ]
+        build_types: ['BACKEND', 'FRONTEND', 'LINT']
+        target: ['PLUGINS', 'CORE']
+        os: [ubuntu-latest]
+        ruby: ['2.6']
+        postgres: ['12']
+        redis: ['4.x']
 
     services:
       postgres:
@@ -68,14 +68,21 @@ jobs:
       - name: Setup packages
         if: env.BUILD_TYPE != 'LINT'
         run: |
+          sudo apt-get update
           sudo apt-get -yqq install postgresql-client libpq-dev gifsicle jpegoptim optipng jhead
           wget -qO- https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-pngquant | sudo sh
+
+      - name: Update imagemagick
+        if: env.BUILD_TYPE == 'BACKEND'
+        run: |
+          wget https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-imagemagick
+          chmod +x install-imagemagick
+          sudo ./install-imagemagick
 
       - name: Setup ruby
         uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          architecture: 'x64'
 
       - name: Setup bundler
         run: |
@@ -111,7 +118,7 @@ jobs:
       - name: Yarn install
         run: yarn install --dev
 
-      - name: "Checkout official plugins"
+      - name: 'Checkout official plugins'
         if: env.TARGET == 'PLUGINS'
         run: bin/rake plugin:install_all_official
 
@@ -127,21 +134,56 @@ jobs:
           bin/rake parallel:create
           bin/rake parallel:migrate
 
-      - name: Rubocop
-        if: env.BUILD_TYPE == 'LINT'
+      - name: Rubocop (core and core plugins)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'CORE'
         run: bundle exec rubocop .
 
-      - name: ESLint
-        if: env.BUILD_TYPE == 'LINT'
-        run: |
-          yarn eslint app/assets/javascripts test/javascripts
-          yarn eslint --global I18n --ext .es6 plugins
+      - name: Rubocop (all plugins)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'PLUGINS'
+        run: bundle exec rubocop plugins
 
-      - name: Prettier
-        if: env.BUILD_TYPE == 'LINT'
+      - name: ESLint (core)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'CORE'
+        run: yarn eslint app/assets/javascripts test/javascripts
+
+      - name: ESLint (core plugins)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'CORE'
+        run: |
+          yarn eslint plugins/**/assets/javascripts plugins/**/test/javascripts
+          yarn eslint --global I18n --ext .es6 plugins/**/assets/javascripts plugins/**/test/javascripts
+
+      - name: ESLint (all plugins)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'PLUGINS'
+        run: |
+          yarn eslint plugins/**/assets/javascripts plugins/**/test/javascripts
+          yarn eslint --global I18n --ext .es6 plugins/**/assets/javascripts plugins/**/test/javascripts
+
+      - name: Prettier (core and core plugins)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'CORE'
         run: |
           yarn prettier -v
-          yarn prettier --list-different "app/assets/stylesheets/**/*.scss" "app/assets/javascripts/**/*.js" "app/assets/javascripts/**/*.es6" "test/javascripts/**/*.es6" "plugins/**/*.scss" "plugins/**/*.es6"
+          yarn prettier --list-different \
+            "app/assets/stylesheets/**/*.scss" \
+            "app/assets/javascripts/**/*.{js,es6}" \
+            "test/javascripts/**/*.{js,es6}" \
+            "plugins/**/assets/stylesheets/**/*.scss" \
+            "plugins/**/assets/javascripts/**/*.{js,es6}"
+
+      - name: Prettier (all plugins)
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'PLUGINS'
+        run: |
+          yarn prettier -v
+          yarn prettier --list-different \
+            "plugins/**/assets/stylesheets/**/*.scss" \
+            "plugins/**/assets/javascripts/**/*.{js,es6}"
+
+      - name: Core English locale
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'CORE'
+        run: bundle exec ruby script/i18n_lint.rb "config/**/locales/{client,server}.en.yml"
+
+      - name: Plugin English locale
+        if: env.BUILD_TYPE == 'LINT' && env.TARGET == 'PLUGINS'
+        run: bundle exec ruby script/i18n_lint.rb "plugins/**/locales/{client,server}.en.yml"
 
       - name: Core RSpec
         if: env.BUILD_TYPE == 'BACKEND' && env.TARGET == 'CORE'
@@ -165,5 +207,5 @@ jobs:
 
       - name: Plugin QUnit # Tests core plugins in TARGET=CORE, and all plugins in TARGET=PLUGINS
         if: env.BUILD_TYPE == 'FRONTEND'
-        run: bundle exec rake plugin:qunit
+        run: bundle exec rake plugin:qunit['*','1200000']
         timeout-minutes: 30
