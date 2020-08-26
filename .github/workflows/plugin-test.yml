@@ -111,11 +111,11 @@ jobs:
 
       - name: Yarn install
         run: yarn install --dev
-      
+
       - name: Install plugin
         uses: actions/checkout@master
         with:
-          path: plugins
+          path: plugins/${{ github.event.repository.name }}
           fetch-depth: 1
 
       - name: debug
