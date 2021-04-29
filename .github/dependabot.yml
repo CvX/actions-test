@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  versioning-strategy: increase-if-necessary
+  ignore:
+  - dependency-name: bundler
+    versions:
+    - 2.2.13
+    - 2.2.14
+  - dependency-name: rubocop-ast
+    versions:
+    - 1.4.1
+  commit-message:
+    prefix: "✨"
